@@ -16,7 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_http_methods
 from django.contrib import messages as django_messages
 
-from apps.accounts.decorators import login_required
+from apps.accounts.decorators import login_required, public_view
 from apps.core.htmx import htmx_view
 from apps.modules_runtime.navigation import with_module_nav
 
@@ -288,7 +288,7 @@ def template_edit(request, pk):
 
     return {
         'form': form,
-        'template': template,
+        'msg_template': template,
         'is_edit': True,
     }
 
@@ -478,6 +478,7 @@ def api_send(request):
     })
 
 
+@public_view
 @csrf_exempt
 @require_POST
 def api_webhook(request):

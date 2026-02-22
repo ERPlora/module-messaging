@@ -86,12 +86,14 @@
                 <div class="card-body">
                     <p class="text-sm text-base-content/60 mb-3">{% trans "Use these variables in your message:" %}</p>
                     <div class="space-y-2">
-                        <code class="text-xs bg-base-200 px-2 py-1 rounded block">{{ '{{customer_name}}' }}</code>
-                        <code class="text-xs bg-base-200 px-2 py-1 rounded block">{{ '{{business_name}}' }}</code>
-                        <code class="text-xs bg-base-200 px-2 py-1 rounded block">{{ '{{appointment_date}}' }}</code>
-                        <code class="text-xs bg-base-200 px-2 py-1 rounded block">{{ '{{appointment_time}}' }}</code>
-                        <code class="text-xs bg-base-200 px-2 py-1 rounded block">{{ '{{service_name}}' }}</code>
-                        <code class="text-xs bg-base-200 px-2 py-1 rounded block">{{ '{{total_amount}}' }}</code>
+                        {% verbatim %}
+                        <code class="text-xs bg-base-200 px-2 py-1 rounded block">{{customer_name}}</code>
+                        <code class="text-xs bg-base-200 px-2 py-1 rounded block">{{business_name}}</code>
+                        <code class="text-xs bg-base-200 px-2 py-1 rounded block">{{appointment_date}}</code>
+                        <code class="text-xs bg-base-200 px-2 py-1 rounded block">{{appointment_time}}</code>
+                        <code class="text-xs bg-base-200 px-2 py-1 rounded block">{{service_name}}</code>
+                        <code class="text-xs bg-base-200 px-2 py-1 rounded block">{{total_amount}}</code>
+                        {% endverbatim %}
                     </div>
                 </div>
             </div>
