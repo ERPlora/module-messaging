@@ -1,0 +1,63 @@
+{% load djicons i18n %}
+
+{% if messages_list %}
+<div class="list">
+    {% for msg in messages_list %}
+    <a hx-get="{% url 'messaging:message_detail' msg.pk %}"
+       hx-target="#main-content-area"
+       hx-push-url="true"
+       class="list-item list-item-clickable">
+        <div class="list-item-start">
+            {% icon msg.channel_icon css_class="text-xl" %}
+        </div>
+        <div class="list-item-content">
+            <div class="list-item-label">
+                {{ msg.recipient_name|default:msg.recipient_contact }}
+                {% if msg.subject %}<span class="text-base-content/50"> - {{ msg.subject|truncatewords:6 }}</span>{% endif %}
+            </div>
+            <div class="list-item-note">
+                {{ msg.body|truncatewords:15 }}
+            </div>
+        </div>
+        <div class="list-item-end">
+            <div class="text-right">
+                <span class="badge badge-sm {{ msg.status_color }}">{{ msg.get_status_display }}</span>
+                <div class="text-xs text-base-content/40 mt-1">{{ msg.created_at|date:"d/m/Y H:i" }}</div>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+
+{% if page_obj and page_obj.has_other_pages %}
+<div class="datatable-footer">
+    <div class="datatable-pagination">
+        {% if page_obj.has_previous %}
+        <button class="btn btn-ghost btn-sm"
+                hx-get="{% url 'messaging:messages' %}?page={{ page_obj.previous_page_number }}&channel={{ channel_filter }}&status={{ status_filter }}&q={{ search_query }}"
+                hx-target="#messages-list-body">
+            {% icon "chevron-back-outline" %}
+        </button>
+        {% endif %}
+        <span class="text-sm text-base-content/60">
+            {% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}
+            Page {{ current }} of {{ total }}
+            {% endblocktrans %}
+        </span>
+        {% if page_obj.has_next %}
+        <button class="btn btn-ghost btn-sm"
+                hx-get="{% url 'messaging:messages' %}?page={{ page_obj.next_page_number }}&channel={{ channel_filter }}&status={{ status_filter }}&q={{ search_query }}"
+                hx-target="#messages-list-body">
+            {% icon "chevron-forward-outline" %}
+        </button>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+{% else %}
+<div class="text-center py-12 text-base-content/40">
+    {% icon "chatbubbles-outline" css_class="text-5xl block mx-auto mb-2" %}
+    <p class="mt-2">{% trans "No messages found" %}</p>
+</div>
+{% endif %}

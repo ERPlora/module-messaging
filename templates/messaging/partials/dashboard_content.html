@@ -1,0 +1,211 @@
+{% load djicons i18n %}
+
+<div class="p-4">
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="card">
+            <div class="card-body p-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
+                        {% icon "chatbubbles-outline" css_class="text-2xl text-primary" %}
+                    </div>
+                    <div>
+                        <div class="text-sm text-base-content/60">{% trans "Total Messages" %}</div>
+                        <div class="text-2xl font-semibold">{{ total_messages }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body p-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-success/10 rounded-xl flex items-center justify-center">
+                        {% icon "send-outline" css_class="text-2xl text-success" %}
+                    </div>
+                    <div>
+                        <div class="text-sm text-base-content/60">{% trans "Sent Today" %}</div>
+                        <div class="text-2xl font-semibold text-success">{{ sent_today }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body p-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-warning/10 rounded-xl flex items-center justify-center">
+                        {% icon "checkmark-done-outline" css_class="text-2xl text-warning" %}
+                    </div>
+                    <div>
+                        <div class="text-sm text-base-content/60">{% trans "Delivery Rate" %}</div>
+                        <div class="text-2xl font-semibold">{{ delivery_rate }}%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body p-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-error/10 rounded-xl flex items-center justify-center">
+                        {% icon "alert-circle-outline" css_class="text-2xl text-error" %}
+                    </div>
+                    <div>
+                        <div class="text-sm text-base-content/60">{% trans "Failed" %}</div>
+                        <div class="text-2xl font-semibold text-error">{{ failed_count }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Quick Actions -->
+        <div class="lg:col-span-1">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title">{% icon "flash-outline" css_class="text-primary" %} {% trans "Quick Actions" %}</h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list">
+                        <a hx-get="{% url 'messaging:send_message' %}"
+                           hx-target="#main-content-area"
+                           hx-push-url="true"
+                           class="list-item list-item-clickable">
+                            <div class="list-item-start">
+                                {% icon "create-outline" css_class="text-xl text-primary" %}
+                            </div>
+                            <div class="list-item-content">
+                                <div class="list-item-label">{% trans "Compose Message" %}</div>
+                                <div class="list-item-note">{% trans "Send a message to a customer" %}</div>
+                            </div>
+                            <div class="list-item-end">
+                                <span class="list-item-chevron"></span>
+                            </div>
+                        </a>
+                        <a hx-get="{% url 'messaging:campaign_create' %}"
+                           hx-target="#main-content-area"
+                           hx-push-url="true"
+                           class="list-item list-item-clickable">
+                            <div class="list-item-start">
+                                {% icon "megaphone-outline" css_class="text-xl text-warning" %}
+                            </div>
+                            <div class="list-item-content">
+                                <div class="list-item-label">{% trans "New Campaign" %}</div>
+                                <div class="list-item-note">{% trans "Create a bulk messaging campaign" %}</div>
+                            </div>
+                            <div class="list-item-end">
+                                <span class="list-item-chevron"></span>
+                            </div>
+                        </a>
+                        <a hx-get="{% url 'messaging:template_create' %}"
+                           hx-target="#main-content-area"
+                           hx-push-url="true"
+                           class="list-item list-item-clickable">
+                            <div class="list-item-start">
+                                {% icon "document-text-outline" css_class="text-xl text-success" %}
+                            </div>
+                            <div class="list-item-content">
+                                <div class="list-item-label">{% trans "Create Template" %}</div>
+                                <div class="list-item-note">{% trans "Design a reusable message template" %}</div>
+                            </div>
+                            <div class="list-item-end">
+                                <span class="list-item-chevron"></span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Overview -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{% icon "stats-chart-outline" css_class="text-primary" %} {% trans "Overview" %}</h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list">
+                        <div class="list-item">
+                            <div class="list-item-content">
+                                <div class="list-item-label">{% trans "Active Campaigns" %}</div>
+                            </div>
+                            <div class="list-item-end">
+                                <span class="badge color-primary">{{ active_campaigns }}</span>
+                            </div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-item-content">
+                                <div class="list-item-label">{% trans "Message Templates" %}</div>
+                            </div>
+                            <div class="list-item-end">
+                                <span class="badge color-success">{{ template_count }}</span>
+                            </div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-item-content">
+                                <div class="list-item-label">{% trans "Delivered" %}</div>
+                            </div>
+                            <div class="list-item-end">
+                                <span class="badge color-success">{{ delivered_count }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Messages -->
+        <div class="lg:col-span-2">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{% icon "time-outline" css_class="text-primary" %} {% trans "Recent Messages" %}</h3>
+                    <a hx-get="{% url 'messaging:messages' %}"
+                       hx-target="#main-content-area"
+                       hx-push-url="true"
+                       class="btn btn-ghost btn-sm">
+                        {% trans "View All" %}
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    {% if recent_messages %}
+                    <div class="list">
+                        {% for msg in recent_messages %}
+                        <a hx-get="{% url 'messaging:message_detail' msg.pk %}"
+                           hx-target="#main-content-area"
+                           hx-push-url="true"
+                           class="list-item list-item-clickable">
+                            <div class="list-item-start">
+                                {% icon msg.channel_icon css_class="text-xl" %}
+                            </div>
+                            <div class="list-item-content">
+                                <div class="list-item-label">
+                                    {{ msg.recipient_name|default:msg.recipient_contact }}
+                                </div>
+                                <div class="list-item-note">
+                                    {{ msg.body|truncatewords:12 }}
+                                </div>
+                            </div>
+                            <div class="list-item-end">
+                                <div class="text-right">
+                                    <span class="badge badge-sm {{ msg.status_color }}">{{ msg.get_status_display }}</span>
+                                    <div class="text-xs text-base-content/40 mt-1">{{ msg.created_at|timesince }} {% trans "ago" %}</div>
+                                </div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-12 text-base-content/40">
+                        {% icon "chatbubbles-outline" css_class="text-5xl block mx-auto mb-2" %}
+                        <p class="mt-2">{% trans "No messages sent yet" %}</p>
+                        <a hx-get="{% url 'messaging:send_message' %}"
+                           hx-target="#main-content-area"
+                           hx-push-url="true"
+                           class="btn btn-sm color-primary mt-4">
+                            {% icon "create-outline" %}
+                            {% trans "Send Your First Message" %}
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,114 @@
+{% load djicons i18n %}
+
+<div class="p-4">
+    <!-- Header with back button -->
+    <div class="flex items-center gap-4 mb-6">
+        <button class="btn btn-ghost btn-sm"
+                hx-get="{% url 'messaging:campaigns' %}"
+                hx-target="#main-content-area"
+                hx-push-url="true">
+            {% icon "arrow-back-outline" %}
+        </button>
+        <div class="flex-1">
+            <h1 class="text-2xl font-bold">{% trans "New Campaign" %}</h1>
+            <p class="text-sm text-base-content/60 mt-1">{% trans "Create a bulk messaging campaign" %}</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2">
+            <div class="card">
+                <form hx-post="{% url 'messaging:campaign_create' %}"
+                      hx-target="#main-content-area"
+                      hx-swap="innerHTML">
+                    {% csrf_token %}
+                    <div class="card-body">
+                        <div class="form-group mb-4">
+                            <label class="form-group-label">{% trans "Campaign Name" %}</label>
+                            {{ form.name }}
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="form-group-label">{% trans "Description" %}</label>
+                            {{ form.description }}
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div class="form-group">
+                                <label class="form-group-label">{% trans "Channel" %}</label>
+                                {{ form.channel }}
+                            </div>
+                            <div class="form-group">
+                                <label class="form-group-label">{% trans "Template" %}</label>
+                                {{ form.template }}
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="form-group-label">{% trans "Schedule (optional)" %}</label>
+                            {{ form.scheduled_at }}
+                            <p class="text-xs text-base-content/50 mt-1">{% trans "Leave empty to start manually" %}</p>
+                        </div>
+                    </div>
+                    <div class="card-body border-t border-base-200 flex justify-end gap-2">
+                        <button type="button" class="btn btn-ghost"
+                                hx-get="{% url 'messaging:campaigns' %}"
+                                hx-target="#main-content-area"
+                                hx-push-url="true">
+                            {% trans "Cancel" %}
+                        </button>
+                        <button type="submit" class="btn color-primary">
+                            {% icon "save-outline" %}
+                            {% trans "Create Campaign" %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Help -->
+        <div class="lg:col-span-1">
+            <div class="callout callout-info">
+                <div class="callout-icon">{% icon "information-circle-outline" %}</div>
+                <div class="callout-content">
+                    <div class="callout-title">{% trans "How Campaigns Work" %}</div>
+                    <div class="callout-text">{% trans "Create a campaign, select a template and target audience, then start sending. Messages will be queued and sent in batches." %}</div>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3 class="card-title">{% icon "list-outline" css_class="text-primary" %} {% trans "Steps" %}</h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list">
+                        <div class="list-item">
+                            <div class="list-item-start">
+                                <span class="badge badge-sm color-primary">1</span>
+                            </div>
+                            <div class="list-item-content">
+                                <div class="list-item-label">{% trans "Create campaign" %}</div>
+                            </div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-item-start">
+                                <span class="badge badge-sm color-primary">2</span>
+                            </div>
+                            <div class="list-item-content">
+                                <div class="list-item-label">{% trans "Select template and channel" %}</div>
+                            </div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-item-start">
+                                <span class="badge badge-sm color-primary">3</span>
+                            </div>
+                            <div class="list-item-content">
+                                <div class="list-item-label">{% trans "Start or schedule sending" %}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

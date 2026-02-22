@@ -1,0 +1,265 @@
+{% load djicons i18n %}
+
+<div class="p-4">
+    <!-- Overview Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="card">
+            <div class="card-body p-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
+                        {% icon "chatbubbles-outline" css_class="text-2xl text-primary" %}
+                    </div>
+                    <div>
+                        <div class="text-sm text-base-content/60">{% trans "Total Messages" %}</div>
+                        <div class="text-2xl font-semibold">{{ total_messages }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body p-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-success/10 rounded-xl flex items-center justify-center">
+                        {% icon "document-text-outline" css_class="text-2xl text-success" %}
+                    </div>
+                    <div>
+                        <div class="text-sm text-base-content/60">{% trans "Templates" %}</div>
+                        <div class="text-2xl font-semibold text-success">{{ total_templates }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body p-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-warning/10 rounded-xl flex items-center justify-center">
+                        {% icon "megaphone-outline" css_class="text-2xl text-warning" %}
+                    </div>
+                    <div>
+                        <div class="text-sm text-base-content/60">{% trans "Campaigns" %}</div>
+                        <div class="text-2xl font-semibold">{{ total_campaigns }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Form -->
+    <form hx-post="{% url 'messaging:settings_save' %}"
+          hx-target="#main-content-area"
+          hx-swap="innerHTML">
+        {% csrf_token %}
+
+        <!-- WhatsApp Settings -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title">{% icon "logo-whatsapp" css_class="text-success" %} {% trans "WhatsApp" %}</h3>
+            </div>
+            <div class="card-body p-0">
+                <div class="list">
+                    <div class="list-item">
+                        <div class="list-item-content">
+                            <div class="list-item-label">{% trans "Enable WhatsApp" %}</div>
+                            <div class="list-item-note">{% trans "Send messages via WhatsApp Business API" %}</div>
+                        </div>
+                        <div class="list-item-end">
+                            <input type="checkbox" name="whatsapp_enabled" class="toggle"
+                                   {% if settings.whatsapp_enabled %}checked{% endif %}>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 space-y-4">
+                    <div class="form-group">
+                        <label class="form-group-label">{% trans "API Token" %}</label>
+                        <input type="password" name="whatsapp_api_token" class="input"
+                               value="{{ settings.whatsapp_api_token }}"
+                               placeholder="{% trans 'WhatsApp Cloud API token' %}">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label class="form-group-label">{% trans "Phone Number ID" %}</label>
+                            <input type="text" name="whatsapp_phone_id" class="input"
+                                   value="{{ settings.whatsapp_phone_id }}"
+                                   placeholder="{% trans 'Phone number ID' %}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-group-label">{% trans "Business Account ID" %}</label>
+                            <input type="text" name="whatsapp_business_id" class="input"
+                                   value="{{ settings.whatsapp_business_id }}"
+                                   placeholder="{% trans 'Business account ID' %}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SMS Settings -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title">{% icon "chatbubble-outline" css_class="text-primary" %} {% trans "SMS" %}</h3>
+            </div>
+            <div class="card-body p-0">
+                <div class="list">
+                    <div class="list-item">
+                        <div class="list-item-content">
+                            <div class="list-item-label">{% trans "Enable SMS" %}</div>
+                            <div class="list-item-note">{% trans "Send text messages via SMS provider" %}</div>
+                        </div>
+                        <div class="list-item-end">
+                            <input type="checkbox" name="sms_enabled" class="toggle"
+                                   {% if settings.sms_enabled %}checked{% endif %}>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label class="form-group-label">{% trans "SMS Provider" %}</label>
+                            <select name="sms_provider" class="select">
+                                <option value="none" {% if settings.sms_provider == 'none' %}selected{% endif %}>{% trans "None" %}</option>
+                                <option value="twilio" {% if settings.sms_provider == 'twilio' %}selected{% endif %}>{% trans "Twilio" %}</option>
+                                <option value="messagebird" {% if settings.sms_provider == 'messagebird' %}selected{% endif %}>{% trans "MessageBird" %}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-group-label">{% trans "Sender Name" %}</label>
+                            <input type="text" name="sms_sender_name" class="input"
+                                   value="{{ settings.sms_sender_name }}"
+                                   placeholder="{% trans 'Max 11 characters' %}" maxlength="11">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-group-label">{% trans "API Key" %}</label>
+                        <input type="password" name="sms_api_key" class="input"
+                               value="{{ settings.sms_api_key }}"
+                               placeholder="{% trans 'Provider API key' %}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Email Settings -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title">{% icon "mail-outline" css_class="text-warning" %} {% trans "Email" %}</h3>
+            </div>
+            <div class="card-body p-0">
+                <div class="list">
+                    <div class="list-item">
+                        <div class="list-item-content">
+                            <div class="list-item-label">{% trans "Enable Email" %}</div>
+                            <div class="list-item-note">{% trans "Send messages via email (SMTP)" %}</div>
+                        </div>
+                        <div class="list-item-end">
+                            <input type="checkbox" name="email_enabled" class="toggle"
+                                   {% if settings.email_enabled %}checked{% endif %}>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label class="form-group-label">{% trans "From Name" %}</label>
+                            <input type="text" name="email_from_name" class="input"
+                                   value="{{ settings.email_from_name }}"
+                                   placeholder="{% trans 'Your Business Name' %}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-group-label">{% trans "From Email" %}</label>
+                            <input type="email" name="email_from_address" class="input"
+                                   value="{{ settings.email_from_address }}"
+                                   placeholder="noreply@yourbusiness.com">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label class="form-group-label">{% trans "SMTP Host" %}</label>
+                            <input type="text" name="email_smtp_host" class="input"
+                                   value="{{ settings.email_smtp_host }}"
+                                   placeholder="smtp.example.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-group-label">{% trans "SMTP Port" %}</label>
+                            <input type="number" name="email_smtp_port" class="input"
+                                   value="{{ settings.email_smtp_port }}" min="1" max="65535">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label class="form-group-label">{% trans "SMTP Username" %}</label>
+                            <input type="text" name="email_smtp_username" class="input"
+                                   value="{{ settings.email_smtp_username }}"
+                                   placeholder="{% trans 'SMTP username' %}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-group-label">{% trans "SMTP Password" %}</label>
+                            <input type="password" name="email_smtp_password" class="input"
+                                   value="{{ settings.email_smtp_password }}"
+                                   placeholder="{% trans 'SMTP password' %}">
+                        </div>
+                    </div>
+                    <div class="list-item">
+                        <div class="list-item-content">
+                            <div class="list-item-label">{% trans "Use TLS" %}</div>
+                            <div class="list-item-note">{% trans "Encrypt connection with TLS (recommended)" %}</div>
+                        </div>
+                        <div class="list-item-end">
+                            <input type="checkbox" name="email_smtp_use_tls" class="toggle"
+                                   {% if settings.email_smtp_use_tls %}checked{% endif %}>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Automation Settings -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title">{% icon "timer-outline" css_class="text-primary" %} {% trans "Automation" %}</h3>
+            </div>
+            <div class="card-body p-0">
+                <div class="list">
+                    <div class="list-item">
+                        <div class="list-item-content">
+                            <div class="list-item-label">{% trans "Appointment Reminders" %}</div>
+                            <div class="list-item-note">{% trans "Automatically send reminders before appointments" %}</div>
+                        </div>
+                        <div class="list-item-end">
+                            <input type="checkbox" name="appointment_reminder_enabled" class="toggle"
+                                   {% if settings.appointment_reminder_enabled %}checked{% endif %}>
+                        </div>
+                    </div>
+                    <div class="list-item">
+                        <div class="list-item-content">
+                            <div class="list-item-label">{% trans "Reminder Hours" %}</div>
+                            <div class="list-item-note">{% trans "Hours before appointment to send reminder" %}</div>
+                        </div>
+                        <div class="list-item-end">
+                            <input type="number" name="appointment_reminder_hours" class="input input-sm"
+                                   value="{{ settings.appointment_reminder_hours }}" min="1" max="168"
+                                   style="width: 80px;">
+                        </div>
+                    </div>
+                    <div class="list-item">
+                        <div class="list-item-content">
+                            <div class="list-item-label">{% trans "Booking Confirmations" %}</div>
+                            <div class="list-item-note">{% trans "Send confirmation when a booking is made" %}</div>
+                        </div>
+                        <div class="list-item-end">
+                            <input type="checkbox" name="booking_confirmation_enabled" class="toggle"
+                                   {% if settings.booking_confirmation_enabled %}checked{% endif %}>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Save Button -->
+        <div class="flex justify-end">
+            <button type="submit" class="btn color-primary">
+                {% icon "save-outline" %}
+                {% trans "Save Settings" %}
+            </button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,117 @@
+{% load djicons i18n %}
+
+<div class="p-4" x-data="{ deleteModal: false, deleteTarget: null }">
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <h2 class="text-xl font-bold">{% trans "Message Templates" %}</h2>
+            <p class="text-sm text-base-content/60">{% trans "Reusable templates for WhatsApp, SMS, and email messages" %}</p>
+        </div>
+        <a class="btn btn-sm color-primary"
+           hx-get="{% url 'messaging:template_create' %}"
+           hx-target="#main-content-area"
+           hx-push-url="true">
+            {% icon "add-outline" %}
+            {% trans "New Template" %}
+        </a>
+    </div>
+
+    <!-- Search -->
+    <div class="mb-4">
+        <label class="input input-sm" style="max-width: 320px;">
+            {% icon "search-outline" %}
+            <input type="search"
+                   name="q"
+                   placeholder="{% trans 'Search templates...' %}"
+                   value="{{ search_query|default:'' }}"
+                   autocomplete="off"
+                   hx-get="{% url 'messaging:templates' %}"
+                   hx-target="#main-content-area"
+                   hx-trigger="input changed delay:300ms, search">
+        </label>
+    </div>
+
+    {% if templates %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for template in templates %}
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title text-sm">{{ template.name }}</h3>
+                {% if template.is_system %}
+                <span class="badge badge-sm">{% trans "System" %}</span>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="badge badge-sm color-primary">{{ template.get_channel_display }}</span>
+                    <span class="badge badge-sm">{{ template.get_category_display }}</span>
+                    {% if template.is_active %}
+                    <span class="badge badge-sm color-success">{% trans "Active" %}</span>
+                    {% else %}
+                    <span class="badge badge-sm color-warning">{% trans "Inactive" %}</span>
+                    {% endif %}
+                </div>
+                {% if template.subject %}
+                <div class="text-xs text-base-content/60 mb-1">{{ template.subject }}</div>
+                {% endif %}
+                <p class="text-sm text-base-content/70">{{ template.body|truncatewords:20 }}</p>
+            </div>
+            <div class="card-body border-t border-base-200 flex justify-end gap-2 py-2">
+                <a class="btn btn-ghost btn-sm"
+                   hx-get="{% url 'messaging:template_edit' template.pk %}"
+                   hx-target="#main-content-area"
+                   hx-push-url="true">
+                    {% icon "create-outline" %}
+                    {% trans "Edit" %}
+                </a>
+                {% if not template.is_system %}
+                <button class="btn btn-ghost btn-sm color-error"
+                        @click="deleteTarget = { pk: '{{ template.pk }}', name: '{{ template.name }}' }; deleteModal = true">
+                    {% icon "trash-outline" %}
+                </button>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-12 text-base-content/40">
+        {% icon "document-text-outline" css_class="text-5xl block mx-auto mb-2" %}
+        <p class="mt-2">{% trans "No templates yet" %}</p>
+        <a hx-get="{% url 'messaging:template_create' %}"
+           hx-target="#main-content-area"
+           hx-push-url="true"
+           class="btn btn-sm color-primary mt-4">
+            {% icon "add-outline" %}
+            {% trans "Create Your First Template" %}
+        </a>
+    </div>
+    {% endif %}
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-backdrop" :data-state="deleteModal ? 'open' : 'closed'" @click.self="deleteModal = false; deleteTarget = null">
+        <div class="modal modal-sm">
+            <div class="modal-header">
+                <h3 class="modal-title">{% trans "Delete Template" %}</h3>
+                <button class="modal-close" @click="deleteModal = false; deleteTarget = null">
+                    {% icon "close-outline" %}
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="text-sm text-base-content/70">
+                    {% trans "Are you sure you want to delete" %} <strong x-text="deleteTarget?.name"></strong>?
+                    {% trans "This action cannot be undone." %}
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost btn-sm" @click="deleteModal = false; deleteTarget = null">
+                    {% trans "Cancel" %}
+                </button>
+                <button class="btn btn-sm color-error"
+                        @click="if(deleteTarget) { htmx.ajax('POST', '/m/messaging/templates/' + deleteTarget.pk + '/delete/', { target: '#main-content-area', swap: 'innerHTML', headers: { 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || '{{ csrf_token }}' } }); }; deleteModal = false; deleteTarget = null">
+                    {% icon "trash-outline" %}
+                    {% trans "Delete" %}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
