@@ -25,6 +25,13 @@ urlpatterns = [
     path('campaigns/<uuid:pk>/start/', views.campaign_start, name='campaign_start'),
     path('campaigns/<uuid:pk>/cancel/', views.campaign_cancel, name='campaign_cancel'),
 
+    # Automations
+    path('automations/', views.automations_list, name='automations'),
+    path('automations/add/', views.automation_add, name='automation_add'),
+    path('automations/<uuid:pk>/edit/', views.automation_edit, name='automation_edit'),
+    path('automations/<uuid:pk>/delete/', views.automation_delete, name='automation_delete'),
+    path('automations/<uuid:pk>/toggle/', views.automation_toggle, name='automation_toggle'),
+
     # API
     path('api/send/', views.api_send, name='api_send'),
     path('api/webhook/', views.api_webhook, name='api_webhook'),

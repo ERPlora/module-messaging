@@ -25,8 +25,11 @@ from .models import (
     MessageTemplate,
     Campaign,
     MessagingSettings,
+    MessageAutomation,
+    AutomationExecution,
     MessageStatusChoices,
     CampaignStatusChoices,
+    AutomationTriggerChoices,
 )
 from .forms import (
     MessageForm,
@@ -564,4 +567,157 @@ def settings_save(request):
         'total_messages': total_messages,
         'total_templates': total_templates,
         'total_campaigns': total_campaigns,
+    })
+
+
+# ============================================================================
+# Automations
+# ============================================================================
+
+@login_required
+@with_module_nav('messaging', 'automations')
+@htmx_view('messaging/pages/automations.html', 'messaging/partials/automations_content.html')
+def automations_list(request):
+    """List all automations."""
+    hub = _hub_id(request)
+    search_query = request.GET.get('q', '').strip()
+
+    qs = MessageAutomation.objects.filter(hub_id=hub, is_deleted=False)
+    if search_query:
+        qs = qs.filter(
+            Q(name__icontains=search_query) |
+            Q(description__icontains=search_query)
+        )
+
+    return {
+        'automations': qs,
+        'search_query': search_query,
+        'trigger_choices': AutomationTriggerChoices.choices,
+    }
+
+
+@login_required
+def automation_add(request):
+    """Add automation — side panel."""
+    hub = _hub_id(request)
+    templates = MessageTemplate.objects.filter(
+        hub_id=hub, is_deleted=False, is_active=True,
+    ).order_by('name')
+
+    if request.method == 'POST':
+        name = request.POST.get('name', '').strip()
+        if not name:
+            django_messages.error(request, _('Name is required'))
+            return django_render(request, 'messaging/partials/panel_automation_add.html', {
+                'templates': templates,
+                'trigger_choices': AutomationTriggerChoices.choices,
+            })
+
+        template_id = request.POST.get('template') or None
+        conditions = {}
+        inactivity_days = request.POST.get('inactivity_days', '').strip()
+        if inactivity_days:
+            conditions['inactivity_days'] = int(inactivity_days)
+
+        MessageAutomation.objects.create(
+            hub_id=hub,
+            name=name,
+            description=request.POST.get('description', '').strip(),
+            trigger=request.POST.get('trigger', 'custom'),
+            channel=request.POST.get('channel', 'email'),
+            template_id=template_id,
+            delay_hours=int(request.POST.get('delay_hours', '0') or '0'),
+            is_active=request.POST.get('is_active') == 'on',
+            conditions=conditions,
+        )
+        django_messages.success(request, _('Automation created successfully'))
+
+        automations = MessageAutomation.objects.filter(hub_id=hub, is_deleted=False)
+        return django_render(request, 'messaging/partials/automations_list.html', {
+            'automations': automations,
+        })
+
+    return django_render(request, 'messaging/partials/panel_automation_add.html', {
+        'templates': templates,
+        'trigger_choices': AutomationTriggerChoices.choices,
+    })
+
+
+@login_required
+def automation_edit(request, pk):
+    """Edit automation — side panel."""
+    hub = _hub_id(request)
+    automation = get_object_or_404(MessageAutomation, pk=pk, hub_id=hub, is_deleted=False)
+    templates = MessageTemplate.objects.filter(
+        hub_id=hub, is_deleted=False, is_active=True,
+    ).order_by('name')
+
+    if request.method == 'POST':
+        name = request.POST.get('name', '').strip()
+        if not name:
+            django_messages.error(request, _('Name is required'))
+            return django_render(request, 'messaging/partials/panel_automation_edit.html', {
+                'automation': automation, 'templates': templates,
+                'trigger_choices': AutomationTriggerChoices.choices,
+            })
+
+        template_id = request.POST.get('template') or None
+        conditions = {}
+        inactivity_days = request.POST.get('inactivity_days', '').strip()
+        if inactivity_days:
+            conditions['inactivity_days'] = int(inactivity_days)
+
+        automation.name = name
+        automation.description = request.POST.get('description', '').strip()
+        automation.trigger = request.POST.get('trigger', automation.trigger)
+        automation.channel = request.POST.get('channel', automation.channel)
+        automation.template_id = template_id
+        automation.delay_hours = int(request.POST.get('delay_hours', '0') or '0')
+        automation.is_active = request.POST.get('is_active') == 'on'
+        automation.conditions = conditions
+        automation.save()
+
+        django_messages.success(request, _('Automation updated successfully'))
+        automations = MessageAutomation.objects.filter(hub_id=hub, is_deleted=False)
+        return django_render(request, 'messaging/partials/automations_list.html', {
+            'automations': automations,
+        })
+
+    return django_render(request, 'messaging/partials/panel_automation_edit.html', {
+        'automation': automation,
+        'templates': templates,
+        'trigger_choices': AutomationTriggerChoices.choices,
+    })
+
+
+@login_required
+@require_POST
+def automation_delete(request, pk):
+    """Soft-delete automation."""
+    hub = _hub_id(request)
+    automation = get_object_or_404(MessageAutomation, pk=pk, hub_id=hub, is_deleted=False)
+    automation.delete()
+    django_messages.success(request, _('Automation deleted'))
+
+    automations = MessageAutomation.objects.filter(hub_id=hub, is_deleted=False)
+    return django_render(request, 'messaging/partials/automations_list.html', {
+        'automations': automations,
+    })
+
+
+@login_required
+@require_POST
+def automation_toggle(request, pk):
+    """Toggle automation active/inactive."""
+    hub = _hub_id(request)
+    automation = get_object_or_404(MessageAutomation, pk=pk, hub_id=hub, is_deleted=False)
+    automation.is_active = not automation.is_active
+    automation.save(update_fields=['is_active', 'updated_at'])
+
+    status = _('activated') if automation.is_active else _('deactivated')
+    django_messages.success(request, _('Automation %(status)s') % {'status': status})
+
+    automations = MessageAutomation.objects.filter(hub_id=hub, is_deleted=False)
+    return django_render(request, 'messaging/partials/automations_list.html', {
+        'automations': automations,
     })

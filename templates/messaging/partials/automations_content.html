@@ -1,0 +1,49 @@
+{% load djicons i18n %}
+
+<div x-data="{
+    panelOpen: false,
+    deleteConfirm: false,
+    deleteTarget: null,
+    openPanel(url) {
+        htmx.ajax('GET', url, { target: '#automation-panel-content', swap: 'innerHTML' });
+        this.panelOpen = true;
+    },
+    closePanel() { this.panelOpen = false; }
+}">
+    <div class="flex items-center justify-between mb-4 mt-5">
+        <h2 class="text-lg font-semibold">{% trans "Automations" %}</h2>
+        <button class="btn btn-sm color-primary"
+                @click="openPanel('{% url 'messaging:automation_add' %}')">
+            {% icon "add-outline" %}
+            {% trans "New Automation" %}
+        </button>
+    </div>
+
+    <div id="automations-list">
+        {% include "messaging/partials/automations_list.html" %}
+    </div>
+
+    <!-- Side Sheet -->
+    <div class="sheet-backdrop" :class="{ 'is-open': panelOpen }" @click.self="closePanel()">
+        <div class="side-sheet side-sheet-right" id="automation-panel-content"></div>
+    </div>
+
+    <!-- Delete Confirmation -->
+    <div class="modal-backdrop" :data-state="deleteConfirm ? 'open' : 'closed'">
+        <div class="modal modal-sm">
+            <div class="modal-header">
+                <h3 class="modal-title">{% trans "Delete Automation" %}</h3>
+            </div>
+            <div class="modal-body">
+                <p>{% trans "Are you sure?" %}</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost btn-sm" @click="deleteConfirm = false">{% trans "Cancel" %}</button>
+                <button class="btn btn-sm color-error"
+                        @click="if(deleteTarget) { htmx.ajax('POST', deleteTarget, { target: '#automations-list', values: { csrfmiddlewaretoken: '{{ csrf_token }}' } }); deleteConfirm = false; }">
+                    {% trans "Delete" %}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

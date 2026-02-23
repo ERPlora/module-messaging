@@ -1,0 +1,83 @@
+{% load i18n djicons %}
+
+<form hx-post="{% url 'messaging:automation_edit' automation.pk %}"
+      hx-target="#automations-list"
+      @htmx:after-request="closePanel()">
+    {% csrf_token %}
+
+    <div class="side-sheet-header">
+        <h2 class="side-sheet-title">{% trans "Edit Automation" %}</h2>
+        <button type="button" class="side-sheet-close" @click="closePanel()">
+            {% icon "close-outline" %}
+        </button>
+    </div>
+
+    <div class="side-sheet-body">
+        <div class="form-group">
+            <label class="form-group-label">{% trans "Name" %} *</label>
+            <input type="text" name="name" class="input" required value="{{ automation.name }}">
+        </div>
+
+        <div class="form-group">
+            <label class="form-group-label">{% trans "Description" %}</label>
+            <textarea name="description" class="textarea" rows="2">{{ automation.description }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label class="form-group-label">{% trans "Trigger" %} *</label>
+            <select name="trigger" class="select" required>
+                {% for value, label in trigger_choices %}
+                <option value="{{ value }}" {% if automation.trigger == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="form-group-label">{% trans "Channel" %}</label>
+            <select name="channel" class="select">
+                <option value="email" {% if automation.channel == 'email' %}selected{% endif %}>{% trans "Email" %}</option>
+                <option value="whatsapp" {% if automation.channel == 'whatsapp' %}selected{% endif %}>{% trans "WhatsApp" %}</option>
+                <option value="sms" {% if automation.channel == 'sms' %}selected{% endif %}>{% trans "SMS" %}</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="form-group-label">{% trans "Template" %}</label>
+            <select name="template" class="select">
+                <option value="">{% trans "None" %}</option>
+                {% for template in templates %}
+                <option value="{{ template.id }}" {% if automation.template_id == template.id %}selected{% endif %}>{{ template.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="form-group-label">{% trans "Delay (hours)" %}</label>
+            <input type="number" name="delay_hours" class="input" value="{{ automation.delay_hours }}" min="0">
+        </div>
+
+        <div class="form-group">
+            <label class="form-group-label">{% trans "Active" %}</label>
+            <input type="checkbox" name="is_active" class="toggle" {% if automation.is_active %}checked{% endif %}>
+        </div>
+
+        {% if automation.total_sent > 0 %}
+        <div class="callout callout-info mt-4">
+            <div class="callout-content">
+                <p class="callout-text">{% trans "Total sent:" %} {{ automation.total_sent }}</p>
+                {% if automation.last_triggered_at %}
+                <p class="callout-text text-xs">{% trans "Last triggered:" %} {{ automation.last_triggered_at|timesince }} {% trans "ago" %}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="side-sheet-footer">
+        <button type="button" class="btn btn-ghost btn-sm" @click="closePanel()">{% trans "Cancel" %}</button>
+        <button type="submit" class="btn btn-sm color-primary">
+            {% icon "save-outline" %}
+            {% trans "Save" %}
+        </button>
+    </div>
+</form>

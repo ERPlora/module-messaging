@@ -512,3 +512,171 @@ class Campaign(HubBaseModel):
         """Cancel the campaign."""
         self.status = CampaignStatusChoices.CANCELLED
         self.save(update_fields=['status', 'updated_at'])
+
+
+# ============================================================================
+# Message Automation (CRM triggers)
+# ============================================================================
+
+class AutomationTriggerChoices(models.TextChoices):
+    WELCOME = 'welcome', _('New Customer Welcome')
+    BIRTHDAY = 'birthday', _('Birthday')
+    ANNIVERSARY = 'anniversary', _('Anniversary')
+    POST_SALE = 'post_sale', _('After Sale')
+    POST_APPOINTMENT = 'post_appointment', _('After Appointment')
+    INACTIVITY = 'inactivity', _('Customer Inactivity')
+    LOYALTY_TIER_CHANGE = 'loyalty_tier_change', _('Loyalty Tier Change')
+    LEAD_STAGE_CHANGE = 'lead_stage_change', _('Lead Stage Change')
+    TICKET_RESOLVED = 'ticket_resolved', _('Ticket Resolved')
+    BOOKING_CONFIRMED = 'booking_confirmed', _('Booking Confirmed')
+    BOOKING_REMINDER = 'booking_reminder', _('Booking Reminder')
+    CUSTOM = 'custom', _('Custom Trigger')
+
+
+class MessageAutomation(HubBaseModel):
+    """Automated messaging rules that fire on CRM events."""
+
+    name = models.CharField(
+        _('Automation Name'),
+        max_length=200,
+    )
+    description = models.TextField(
+        _('Description'),
+        blank=True,
+    )
+    trigger = models.CharField(
+        _('Trigger'),
+        max_length=30,
+        choices=AutomationTriggerChoices.choices,
+    )
+    channel = models.CharField(
+        _('Channel'),
+        max_length=20,
+        choices=ChannelChoices.choices,
+        default=ChannelChoices.EMAIL,
+    )
+    template = models.ForeignKey(
+        MessageTemplate,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='automations',
+        verbose_name=_('Template'),
+    )
+    delay_hours = models.IntegerField(
+        _('Delay (hours)'),
+        default=0,
+        help_text=_('Hours to wait after trigger before sending'),
+    )
+    is_active = models.BooleanField(
+        _('Active'),
+        default=True,
+    )
+    conditions = models.JSONField(
+        _('Conditions'),
+        default=dict,
+        blank=True,
+        help_text=_('Additional conditions (e.g., inactivity_days: 30)'),
+    )
+    total_sent = models.PositiveIntegerField(
+        _('Total Sent'),
+        default=0,
+    )
+    last_triggered_at = models.DateTimeField(
+        _('Last Triggered'),
+        null=True,
+        blank=True,
+    )
+
+    class Meta(HubBaseModel.Meta):
+        db_table = 'messaging_automation'
+        verbose_name = _('Message Automation')
+        verbose_name_plural = _('Message Automations')
+        ordering = ['name']
+
+    def __str__(self):
+        return f'{self.name} ({self.get_trigger_display()})'
+
+    @property
+    def trigger_icon(self):
+        icons = {
+            'welcome': 'hand-right-outline',
+            'birthday': 'gift-outline',
+            'anniversary': 'heart-outline',
+            'post_sale': 'cart-outline',
+            'post_appointment': 'calendar-outline',
+            'inactivity': 'time-outline',
+            'loyalty_tier_change': 'trophy-outline',
+            'lead_stage_change': 'funnel-outline',
+            'ticket_resolved': 'checkmark-done-outline',
+            'booking_confirmed': 'globe-outline',
+            'booking_reminder': 'alarm-outline',
+            'custom': 'code-outline',
+        }
+        return icons.get(self.trigger, 'flash-outline')
+
+
+class AutomationExecution(HubBaseModel):
+    """Log of automation executions."""
+
+    automation = models.ForeignKey(
+        MessageAutomation,
+        on_delete=models.CASCADE,
+        related_name='executions',
+        verbose_name=_('Automation'),
+    )
+    customer = models.ForeignKey(
+        'customers.Customer',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='automation_executions',
+        verbose_name=_('Customer'),
+    )
+    message = models.ForeignKey(
+        Message,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='automation_executions',
+        verbose_name=_('Message'),
+    )
+    status = models.CharField(
+        _('Status'),
+        max_length=20,
+        choices=[
+            ('pending', _('Pending')),
+            ('sent', _('Sent')),
+            ('failed', _('Failed')),
+            ('skipped', _('Skipped')),
+        ],
+        default='pending',
+    )
+    trigger_data = models.JSONField(
+        _('Trigger Data'),
+        default=dict,
+        blank=True,
+    )
+    error_message = models.TextField(
+        _('Error'),
+        blank=True,
+    )
+    scheduled_for = models.DateTimeField(
+        _('Scheduled For'),
+        null=True,
+        blank=True,
+    )
+    executed_at = models.DateTimeField(
+        _('Executed At'),
+        null=True,
+        blank=True,
+    )
+
+    class Meta(HubBaseModel.Meta):
+        db_table = 'messaging_automation_execution'
+        verbose_name = _('Automation Execution')
+        verbose_name_plural = _('Automation Executions')
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'{self.automation.name} -> {self.customer}'
