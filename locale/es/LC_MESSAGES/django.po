@@ -1,0 +1,849 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-24 22:58+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+msgid "Recipient name"
+msgstr "Nombre del destinatario"
+
+msgid "Phone number or email"
+msgstr "Número de teléfono o correo"
+
+msgid "Email subject (optional for SMS/WhatsApp)"
+msgstr "Asunto del correo (opcional para SMS/WhatsApp)"
+
+msgid "Message body..."
+msgstr "Cuerpo del mensaje..."
+
+msgid "Template name"
+msgstr "Nombre de la plantilla"
+
+msgid "Email subject line"
+msgstr "Línea de asunto del correo"
+
+msgid "Message body with {{customer_name}}, {{business_name}}, etc."
+msgstr "Cuerpo del mensaje con {{customer_name}}, {{business_name}}, etc."
+
+msgid "Campaign name"
+msgstr "Nombre de la campaña"
+
+msgid "Campaign description (optional)"
+msgstr "Descripción de la campaña (opcional)"
+
+msgid "WhatsApp Cloud API token"
+msgstr "Token de la API de WhatsApp Cloud"
+
+msgid "Phone number ID"
+msgstr "ID del número de teléfono"
+
+msgid "Business account ID"
+msgstr "ID de la cuenta comercial"
+
+msgid "API key"
+msgstr "Clave API"
+
+msgid "Sender name (max 11 chars)"
+msgstr "Nombre del remitente (máx. 11 caracteres)"
+
+msgid "Your Business Name"
+msgstr "Nombre de tu negocio"
+
+msgid "noreply@yourbusiness.com"
+msgstr "noreply@tunegocio.com"
+
+msgid "smtp.example.com"
+msgstr "smtp.ejemplo.com"
+
+msgid "SMTP username"
+msgstr "Usuario SMTP"
+
+msgid "SMTP password"
+msgstr "Contraseña SMTP"
+
+msgid "WhatsApp"
+msgstr "WhatsApp"
+
+msgid "SMS"
+msgstr "SMS"
+
+msgid "Email"
+msgstr "Correo electrónico"
+
+msgid "All Channels"
+msgstr "Todos los canales"
+
+msgid "Queued"
+msgstr "En cola"
+
+msgid "Sent"
+msgstr "Enviado"
+
+msgid "Delivered"
+msgstr "Entregado"
+
+msgid "Failed"
+msgstr "Fallido"
+
+msgid "Read"
+msgstr "Leído"
+
+msgid "Draft"
+msgstr "Borrador"
+
+msgid "Scheduled"
+msgstr "Programado"
+
+msgid "Sending"
+msgstr "Enviando"
+
+msgid "Completed"
+msgstr "Completado"
+
+msgid "Cancelled"
+msgstr "Cancelado"
+
+msgid "None"
+msgstr "Ninguno"
+
+msgid "Twilio"
+msgstr "Twilio"
+
+msgid "MessageBird"
+msgstr "MessageBird"
+
+msgid "Appointment Reminder"
+msgstr "Recordatorio de cita"
+
+msgid "Booking Confirmation"
+msgstr "Confirmación de reserva"
+
+msgid "Receipt"
+msgstr "Recibo"
+
+msgid "Marketing"
+msgstr "Marketing"
+
+msgid "Custom"
+msgstr "Personalizado"
+
+msgid "WhatsApp Enabled"
+msgstr "WhatsApp habilitado"
+
+msgid "WhatsApp API Token"
+msgstr "Token de la API de WhatsApp"
+
+msgid "WhatsApp Phone ID"
+msgstr "ID de teléfono de WhatsApp"
+
+msgid "WhatsApp Business ID"
+msgstr "ID de WhatsApp Business"
+
+msgid "SMS Enabled"
+msgstr "SMS habilitado"
+
+msgid "SMS Provider"
+msgstr "Proveedor de SMS"
+
+msgid "SMS API Key"
+msgstr "Clave API de SMS"
+
+msgid "SMS Sender Name"
+msgstr "Nombre del remitente de SMS"
+
+msgid "Email Enabled"
+msgstr "Email habilitado"
+
+msgid "From Name"
+msgstr "Nombre del remitente"
+
+msgid "From Email Address"
+msgstr "Dirección de email del remitente"
+
+msgid "SMTP Host"
+msgstr "Servidor SMTP"
+
+msgid "SMTP Port"
+msgstr "Puerto SMTP"
+
+msgid "SMTP Username"
+msgstr "Usuario SMTP"
+
+msgid "SMTP Password"
+msgstr "Contraseña SMTP"
+
+msgid "Use TLS"
+msgstr "Usar TLS"
+
+msgid "Appointment Reminders"
+msgstr "Recordatorios de citas"
+
+msgid "Reminder Hours Before"
+msgstr "Horas antes del recordatorio"
+
+msgid "Booking Confirmations"
+msgstr "Confirmaciones de reserva"
+
+msgid "Messaging Settings"
+msgstr "Ajustes de mensajería"
+
+msgid "Template Name"
+msgstr "Nombre de la plantilla"
+
+msgid "Channel"
+msgstr "Canal"
+
+msgid "Category"
+msgstr "Categoría"
+
+msgid "Subject"
+msgstr "Asunto"
+
+msgid "Body"
+msgstr "Cuerpo"
+
+msgid "Message body with {{variables}}"
+msgstr "Cuerpo del mensaje con {{variables}}"
+
+msgid "Active"
+msgstr "Activo"
+
+msgid "System Template"
+msgstr "Plantilla del sistema"
+
+msgid "Message Template"
+msgstr "Plantilla de mensaje"
+
+msgid "Message Templates"
+msgstr "Plantillas de mensaje"
+
+msgid "Recipient Name"
+msgstr "Nombre del destinatario"
+
+msgid "Recipient Contact"
+msgstr "Contacto del destinatario"
+
+msgid "Phone number or email address"
+msgstr "Número de teléfono o dirección de email"
+
+msgid "Status"
+msgstr "Estado"
+
+msgid "Template"
+msgstr "Plantilla"
+
+msgid "Customer"
+msgstr "Cliente"
+
+msgid "Sent At"
+msgstr "Enviado el"
+
+msgid "Delivered At"
+msgstr "Entregado el"
+
+msgid "Read At"
+msgstr "Leído el"
+
+msgid "Error Message"
+msgstr "Mensaje de error"
+
+msgid "External ID"
+msgstr "ID externo"
+
+msgid "Provider message ID"
+msgstr "ID de mensaje del proveedor"
+
+msgid "Metadata"
+msgstr "Metadatos"
+
+msgid "Message"
+msgstr "Mensaje"
+
+msgid "Messages"
+msgstr "Mensajes"
+
+msgid "Campaign Name"
+msgstr "Nombre de la campaña"
+
+msgid "Description"
+msgstr "Descripción"
+
+msgid "Scheduled At"
+msgstr "Programado el"
+
+msgid "Started At"
+msgstr "Iniciado el"
+
+msgid "Completed At"
+msgstr "Completado el"
+
+msgid "Total Recipients"
+msgstr "Total de destinatarios"
+
+msgid "Sent Count"
+msgstr "Cantidad enviada"
+
+msgid "Delivered Count"
+msgstr "Cantidad entregada"
+
+msgid "Failed Count"
+msgstr "Cantidad fallida"
+
+msgid "Target Filter"
+msgstr "Filtro objetivo"
+
+msgid "Customer filter criteria"
+msgstr "Criterios de filtrado de clientes"
+
+msgid "Campaign"
+msgstr "Campaña"
+
+msgid "Campaigns"
+msgstr "Campañas"
+
+msgid "New Customer Welcome"
+msgstr "Bienvenida nuevo cliente"
+
+msgid "Birthday"
+msgstr "Cumpleaños"
+
+msgid "Anniversary"
+msgstr "Aniversario"
+
+msgid "After Sale"
+msgstr "Después de la venta"
+
+msgid "After Appointment"
+msgstr "Después de la cita"
+
+msgid "Customer Inactivity"
+msgstr "Inactividad del cliente"
+
+msgid "Loyalty Tier Change"
+msgstr "Cambio de nivel de fidelización"
+
+msgid "Lead Stage Change"
+msgstr "Cambio de etapa de lead"
+
+msgid "Ticket Resolved"
+msgstr "Ticket resuelto"
+
+msgid "Booking Confirmed"
+msgstr "Reserva confirmada"
+
+msgid "Booking Reminder"
+msgstr "Recordatorio de reserva"
+
+msgid "Custom Trigger"
+msgstr "Disparador personalizado"
+
+msgid "Automation Name"
+msgstr "Nombre de la automatización"
+
+msgid "Trigger"
+msgstr "Disparador"
+
+msgid "Delay (hours)"
+msgstr "Retraso (horas)"
+
+msgid "Hours to wait after trigger before sending"
+msgstr "Horas de espera después del disparador antes de enviar"
+
+msgid "Conditions"
+msgstr "Condiciones"
+
+msgid "Additional conditions (e.g., inactivity_days: 30)"
+msgstr "Condiciones adicionales (ej., inactivity_days: 30)"
+
+msgid "Total Sent"
+msgstr "Total enviados"
+
+msgid "Last Triggered"
+msgstr "Último disparo"
+
+msgid "Message Automation"
+msgstr "Automatización de mensajes"
+
+msgid "Message Automations"
+msgstr "Automatizaciones de mensajes"
+
+msgid "Automation"
+msgstr "Automatización"
+
+msgid "Pending"
+msgstr "Pendiente"
+
+msgid "Skipped"
+msgstr "Omitido"
+
+msgid "Trigger Data"
+msgstr "Datos del disparador"
+
+msgid "Error"
+msgstr "Error"
+
+msgid "Scheduled For"
+msgstr "Programado para"
+
+msgid "Executed At"
+msgstr "Ejecutado el"
+
+msgid "Automation Execution"
+msgstr "Ejecución de automatización"
+
+msgid "Automation Executions"
+msgstr "Ejecuciones de automatización"
+
+msgid "Messaging"
+msgstr "Mensajería"
+
+msgid ""
+"Customer communication via WhatsApp, SMS, and email with CRM automations"
+msgstr ""
+"Comunicación con clientes vía WhatsApp, SMS y email con automatizaciones CRM"
+
+msgid "Dashboard"
+msgstr "Panel"
+
+msgid "Templates"
+msgstr "Plantillas"
+
+msgid "Automations"
+msgstr "Automatizaciones"
+
+msgid "Settings"
+msgstr "Ajustes"
+
+msgid "New Automation"
+msgstr "Nueva automatización"
+
+msgid "Delete Automation"
+msgstr "Eliminar automatización"
+
+msgid "Are you sure?"
+msgstr "¿Estás seguro?"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "Delete"
+msgstr "Eliminar"
+
+msgid "Inactive"
+msgstr "Inactivo"
+
+msgid "Delay:"
+msgstr "Retraso:"
+
+msgid "sent"
+msgstr "enviado"
+
+msgid "Deactivate"
+msgstr "Desactivar"
+
+msgid "Activate"
+msgstr "Activar"
+
+msgid "Edit"
+msgstr "Editar"
+
+msgid "No automations configured"
+msgstr "No hay automatizaciones configuradas"
+
+msgid "Create automations to send messages automatically based on CRM events"
+msgstr ""
+"Crear automatizaciones para enviar mensajes automáticamente basados en "
+"eventos del CRM"
+
+msgid "Start Campaign"
+msgstr "Iniciar campaña"
+
+msgid "Recipients"
+msgstr "Destinatarios"
+
+msgid "Progress"
+msgstr "Progreso"
+
+msgid "Delivery Stats"
+msgstr "Estadísticas de entrega"
+
+msgid "Delivery Rate"
+msgstr "Tasa de entrega"
+
+msgid "Send Progress"
+msgstr "Progreso de envío"
+
+msgid "Details"
+msgstr "Detalles"
+
+msgid "Created"
+msgstr "Creado"
+
+msgid "Started"
+msgstr "Iniciado"
+
+msgid "Cancel Campaign"
+msgstr "Cancelar campaña"
+
+msgid "Are you sure you want to cancel this campaign?"
+msgstr "¿Estás seguro de que quieres cancelar esta campaña?"
+
+msgid ""
+"This action cannot be undone. Messages already sent will not be affected."
+msgstr ""
+"Esta acción no se puede deshacer. Los mensajes ya enviados no se verán "
+"afectados."
+
+msgid "Keep Running"
+msgstr "Seguir ejecutando"
+
+msgid "New Campaign"
+msgstr "Nueva campaña"
+
+msgid "Create a bulk messaging campaign"
+msgstr "Crear una campaña de mensajería masiva"
+
+msgid "Schedule (optional)"
+msgstr "Programación (opcional)"
+
+msgid "Leave empty to start manually"
+msgstr "Dejar vacío para iniciar manualmente"
+
+msgid "Create Campaign"
+msgstr "Crear campaña"
+
+msgid "How Campaigns Work"
+msgstr "Cómo funcionan las campañas"
+
+msgid ""
+"Create a campaign, select a template and target audience, then start "
+"sending. Messages will be queued and sent in batches."
+msgstr ""
+"Crea una campaña, selecciona una plantilla y audiencia objetivo, y empieza a"
+" enviar. Los mensajes se pondrán en cola y se enviarán en lotes."
+
+msgid "Steps"
+msgstr "Pasos"
+
+msgid "Create campaign"
+msgstr "Crear campaña"
+
+msgid "Select template and channel"
+msgstr "Seleccionar plantilla y canal"
+
+msgid "Start or schedule sending"
+msgstr "Iniciar o programar envío"
+
+msgid "Bulk messaging campaigns to reach your customers"
+msgstr "Campañas de mensajería masiva para llegar a tus clientes"
+
+msgid "Search campaigns..."
+msgstr "Buscar campañas..."
+
+msgid "All Status"
+msgstr "Todos los estados"
+
+msgid "No campaigns yet"
+msgstr "Sin campañas aún"
+
+msgid "Create Your First Campaign"
+msgstr "Crea tu primera campaña"
+
+msgid "Compose Message"
+msgstr "Redactar mensaje"
+
+msgid "Send a message to a customer via WhatsApp, SMS, or email"
+msgstr "Enviar un mensaje a un cliente vía WhatsApp, SMS o email"
+
+msgid "Contact"
+msgstr "Contacto"
+
+msgid "Template (optional)"
+msgstr "Plantilla (opcional)"
+
+msgid "Send Message"
+msgstr "Enviar mensaje"
+
+msgid "Variables"
+msgstr "Variables"
+
+msgid "Use these variables in your message:"
+msgstr "Usa estas variables en tu mensaje:"
+
+msgid "Available Templates"
+msgstr "Plantillas disponibles"
+
+msgid "Total Messages"
+msgstr "Total de mensajes"
+
+msgid "Sent Today"
+msgstr "Enviados hoy"
+
+msgid "Quick Actions"
+msgstr "Acciones rápidas"
+
+msgid "Send a message to a customer"
+msgstr "Enviar un mensaje a un cliente"
+
+msgid "Create Template"
+msgstr "Crear plantilla"
+
+msgid "Design a reusable message template"
+msgstr "Diseñar una plantilla de mensaje reutilizable"
+
+msgid "Overview"
+msgstr "Vista general"
+
+msgid "Active Campaigns"
+msgstr "Campañas activas"
+
+msgid "Recent Messages"
+msgstr "Mensajes recientes"
+
+msgid "View All"
+msgstr "Ver todo"
+
+msgid "ago"
+msgstr "hace"
+
+msgid "No messages sent yet"
+msgstr "Sin mensajes enviados aún"
+
+msgid "Send Your First Message"
+msgstr "Envía tu primer mensaje"
+
+msgid "Message Detail"
+msgstr "Detalle del mensaje"
+
+msgid "Recipient"
+msgstr "Destinatario"
+
+msgid "Timeline"
+msgstr "Línea de tiempo"
+
+msgid "Search messages..."
+msgstr "Buscar mensajes..."
+
+#, python-format
+msgid ""
+"\n"
+"            Page %(current)s of %(total)s\n"
+"            "
+msgstr ""
+"\n"
+"            Página %(current)s de %(total)s\n"
+"            "
+
+msgid "No messages found"
+msgstr "No se encontraron mensajes"
+
+msgid "Name"
+msgstr "Nombre"
+
+msgid "e.g., Welcome new customers"
+msgstr "ej., Dar la bienvenida a nuevos clientes"
+
+msgid "Create Automation"
+msgstr "Crear automatización"
+
+msgid "Edit Automation"
+msgstr "Editar automatización"
+
+msgid "Total sent:"
+msgstr "Total enviados:"
+
+msgid "Last triggered:"
+msgstr "Último disparo:"
+
+msgid "Save"
+msgstr "Guardar"
+
+msgid "Enable WhatsApp"
+msgstr "Habilitar WhatsApp"
+
+msgid "Send messages via WhatsApp Business API"
+msgstr "Enviar mensajes vía la API de WhatsApp Business"
+
+msgid "API Token"
+msgstr "Token API"
+
+msgid "Phone Number ID"
+msgstr "ID del número de teléfono"
+
+msgid "Business Account ID"
+msgstr "ID de cuenta comercial"
+
+msgid "Enable SMS"
+msgstr "Habilitar SMS"
+
+msgid "Send text messages via SMS provider"
+msgstr "Enviar mensajes de texto vía proveedor de SMS"
+
+msgid "Sender Name"
+msgstr "Nombre del remitente"
+
+msgid "Max 11 characters"
+msgstr "Máximo 11 caracteres"
+
+msgid "API Key"
+msgstr "Clave API"
+
+msgid "Provider API key"
+msgstr "Clave API del proveedor"
+
+msgid "Enable Email"
+msgstr "Habilitar email"
+
+msgid "Send messages via email (SMTP)"
+msgstr "Enviar mensajes por email (SMTP)"
+
+msgid "From Email"
+msgstr "Email del remitente"
+
+msgid "Encrypt connection with TLS (recommended)"
+msgstr "Cifrar conexión con TLS (recomendado)"
+
+msgid "Automatically send reminders before appointments"
+msgstr "Enviar recordatorios automáticamente antes de las citas"
+
+msgid "Reminder Hours"
+msgstr "Horas del recordatorio"
+
+msgid "Hours before appointment to send reminder"
+msgstr "Horas antes de la cita para enviar recordatorio"
+
+msgid "Send confirmation when a booking is made"
+msgstr "Enviar confirmación cuando se haga una reserva"
+
+msgid "Save Settings"
+msgstr "Guardar ajustes"
+
+msgid "Edit Template"
+msgstr "Editar plantilla"
+
+msgid "New Template"
+msgstr "Nueva plantilla"
+
+msgid "Subject (for email)"
+msgstr "Asunto (para email)"
+
+msgid "Message Body"
+msgstr "Cuerpo del mensaje"
+
+msgid "Save Changes"
+msgstr "Guardar cambios"
+
+msgid "Template Variables"
+msgstr "Variables de la plantilla"
+
+msgid "Available variables for use in your template:"
+msgstr "Variables disponibles para usar en tu plantilla:"
+
+msgid "Tip"
+msgstr "Consejo"
+
+msgid ""
+"Templates marked as 'All Channels' can be used for WhatsApp, SMS, and email."
+" For email, remember to set a subject line."
+msgstr ""
+"Las plantillas marcadas como 'Todos los canales' se pueden usar para "
+"WhatsApp, SMS y email. Para email, recuerda establecer una línea de asunto."
+
+msgid "Reusable templates for WhatsApp, SMS, and email messages"
+msgstr "Plantillas reutilizables para mensajes de WhatsApp, SMS y email"
+
+msgid "Search templates..."
+msgstr "Buscar plantillas..."
+
+msgid "System"
+msgstr "Sistema"
+
+msgid "No templates yet"
+msgstr "Sin plantillas aún"
+
+msgid "Create Your First Template"
+msgstr "Crea tu primera plantilla"
+
+msgid "Delete Template"
+msgstr "Eliminar plantilla"
+
+msgid "Are you sure you want to delete"
+msgstr "¿Estás seguro de que quieres eliminar"
+
+msgid "This action cannot be undone."
+msgstr "Esta acción no se puede deshacer."
+
+msgid "Message sent successfully"
+msgstr "Mensaje enviado correctamente"
+
+msgid "Please correct the errors below"
+msgstr "Por favor, corrige los errores siguientes"
+
+msgid "Template created successfully"
+msgstr "Plantilla creada correctamente"
+
+msgid "Template updated successfully"
+msgstr "Plantilla actualizada correctamente"
+
+msgid "System templates cannot be deleted"
+msgstr "Las plantillas del sistema no se pueden eliminar"
+
+msgid "Template deleted successfully"
+msgstr "Plantilla eliminada correctamente"
+
+msgid "Campaign created successfully"
+msgstr "Campaña creada correctamente"
+
+msgid "Campaign cannot be started in its current state"
+msgstr "La campaña no puede iniciarse en su estado actual"
+
+msgid "Campaign started"
+msgstr "Campaña iniciada"
+
+msgid "Campaign is already finished"
+msgstr "La campaña ya ha finalizado"
+
+msgid "Campaign cancelled"
+msgstr "Campaña cancelada"
+
+msgid "Invalid JSON"
+msgstr "JSON inválido"
+
+msgid "Settings saved successfully"
+msgstr "Ajustes guardados correctamente"
+
+msgid "Name is required"
+msgstr "El nombre es obligatorio"
+
+msgid "Automation created successfully"
+msgstr "Automatización creada correctamente"
+
+msgid "Automation updated successfully"
+msgstr "Automatización actualizada correctamente"
+
+msgid "Automation deleted"
+msgstr "Automatización eliminada"
+
+msgid "activated"
+msgstr "activado"
+
+msgid "deactivated"
+msgstr "desactivado"
+
+#, python-format
+msgid "Automation %(status)s"
+msgstr "Automatización %(status)s"

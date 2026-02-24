@@ -435,7 +435,7 @@ def api_send(request):
     try:
         data = json.loads(request.body)
     except (json.JSONDecodeError, ValueError):
-        return JsonResponse({'success': False, 'error': 'Invalid JSON'}, status=400)
+        return JsonResponse({'success': False, 'error': _('Invalid JSON')}, status=400)
 
     channel = data.get('channel')
     recipient_contact = data.get('recipient_contact', '')
@@ -494,7 +494,7 @@ def api_webhook(request):
     try:
         data = json.loads(request.body)
     except (json.JSONDecodeError, ValueError):
-        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+        return JsonResponse({'error': _('Invalid JSON')}, status=400)
 
     external_id = data.get('external_id', '')
     status = data.get('status', '')
