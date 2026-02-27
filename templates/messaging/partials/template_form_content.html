@@ -1,14 +1,9 @@
 {% load djicons i18n %}
+<div data-back-url="{% url 'messaging:templates' %}" hidden></div>
 
 <div class="p-4">
-    <!-- Header with back button -->
+    <!-- Header -->
     <div class="flex items-center gap-4 mb-6">
-        <button class="btn btn-ghost btn-sm"
-                hx-get="{% url 'messaging:templates' %}"
-                hx-target="#main-content-area"
-                hx-push-url="true">
-            {% icon "arrow-back-outline" %}
-        </button>
         <div class="flex-1">
             <h1 class="text-2xl font-bold">
                 {% if is_edit %}{% trans "Edit Template" %}{% else %}{% trans "New Template" %}{% endif %}
