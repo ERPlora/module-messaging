@@ -16,7 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_http_methods
 from django.contrib import messages as django_messages
 
-from apps.accounts.decorators import login_required, public_view
+from apps.accounts.decorators import login_required, public_view, permission_required
 from apps.core.htmx import htmx_view
 from apps.modules_runtime.navigation import with_module_nav
 
@@ -525,6 +525,7 @@ def api_webhook(request):
 # ============================================================================
 
 @login_required
+@permission_required('messaging.manage_settings')
 @with_module_nav('messaging', 'settings')
 @htmx_view('messaging/pages/settings.html', 'messaging/partials/settings_content.html')
 def settings_view(request):
@@ -545,6 +546,7 @@ def settings_view(request):
 
 
 @login_required
+@permission_required('messaging.manage_settings')
 @require_POST
 def settings_save(request):
     """Save messaging settings."""
