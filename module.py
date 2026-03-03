@@ -40,3 +40,26 @@ PERMISSIONS = [
     'messaging.delete_automation',
     'messaging.manage_settings',
 ]
+
+ROLE_PERMISSIONS = {
+    "admin": ["*"],
+    "manager": [
+        "add_automation",
+        "add_campaign",
+        "add_template",
+        "change_automation",
+        "change_template",
+        "send_message",
+        "view_automation",
+        "view_campaign",
+        "view_message",
+        "view_template",
+    ],
+    "employee": [
+        "send_message",
+        "view_automation",
+        "view_campaign",
+        "view_message",
+        "view_template",
+    ],
+}
