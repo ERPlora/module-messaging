@@ -599,6 +599,7 @@ def automations_list(request):
 
 
 @login_required
+@htmx_view('messaging/pages/automation_add.html', 'messaging/partials/automation_add_content.html')
 def automation_add(request):
     """Add automation — side panel."""
     hub = _hub_id(request)
@@ -610,7 +611,7 @@ def automation_add(request):
         name = request.POST.get('name', '').strip()
         if not name:
             django_messages.error(request, _('Name is required'))
-            return django_render(request, 'messaging/partials/panel_automation_add.html', {
+            return django_render(request, 'messaging/partials/automation_add_content.html', {
                 'templates': templates,
                 'trigger_choices': AutomationTriggerChoices.choices,
             })
@@ -639,13 +640,14 @@ def automation_add(request):
             'automations': automations,
         })
 
-    return django_render(request, 'messaging/partials/panel_automation_add.html', {
+    return {
         'templates': templates,
         'trigger_choices': AutomationTriggerChoices.choices,
-    })
+    }
 
 
 @login_required
+@htmx_view('messaging/pages/automation_edit.html', 'messaging/partials/automation_edit_content.html')
 def automation_edit(request, pk):
     """Edit automation — side panel."""
     hub = _hub_id(request)
@@ -658,7 +660,7 @@ def automation_edit(request, pk):
         name = request.POST.get('name', '').strip()
         if not name:
             django_messages.error(request, _('Name is required'))
-            return django_render(request, 'messaging/partials/panel_automation_edit.html', {
+            return django_render(request, 'messaging/partials/automation_edit_content.html', {
                 'automation': automation, 'templates': templates,
                 'trigger_choices': AutomationTriggerChoices.choices,
             })
@@ -685,11 +687,11 @@ def automation_edit(request, pk):
             'automations': automations,
         })
 
-    return django_render(request, 'messaging/partials/panel_automation_edit.html', {
+    return {
         'automation': automation,
         'templates': templates,
         'trigger_choices': AutomationTriggerChoices.choices,
-    })
+    }
 
 
 @login_required

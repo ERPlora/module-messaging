@@ -1,0 +1,95 @@
+{% load djicons i18n %}
+<div data-back-url="{% url 'messaging:automations' %}" hidden></div>
+
+<div class="p-4">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold">{% trans "Add Automation" %}</h1>
+        <div class="flex gap-2">
+            <a class="btn btn-ghost btn-sm"
+               hx-get="{% url 'messaging:automations' %}"
+               hx-target="#main-content-area"
+               hx-push-url="true">
+                {% trans "Cancel" %}
+            </a>
+            <button type="submit" form="add-automation-form" class="btn btn-sm color-primary">
+                {% icon "checkmark-outline" %}
+                {% trans "Save" %}
+            </button>
+        </div>
+    </div>
+
+    <!-- Form -->
+    <form hx-post="{% url 'messaging:automation_add' %}" class="max-w-2xl">
+        {% csrf_token %}
+        <div class="card mb-4">
+            <div class="card-body flex flex-col gap-4">
+                <div class="side-sheet-header">
+                <h2 class="side-sheet-title">{% trans "New Automation" %}</h2>
+                <button type="button" class="side-sheet-close">
+                {% icon "close-outline" %}
+                </button>
+                </div>
+
+                <div class="side-sheet-body">
+                <div class="form-group">
+                <label class="form-group-label">{% trans "Name" %} *</label>
+                <input type="text" name="name" class="input" required placeholder="{% trans 'e.g., Welcome new customers' %}">
+                </div>
+
+                <div class="form-group">
+                <label class="form-group-label">{% trans "Description" %}</label>
+                <textarea name="description" class="textarea" rows="2"></textarea>
+                </div>
+
+                <div class="form-group">
+                <label class="form-group-label">{% trans "Trigger" %} *</label>
+                <select name="trigger" class="select" required>
+                {% for value, label in trigger_choices %}
+                <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+                </select>
+                </div>
+
+                <div class="form-group">
+                <label class="form-group-label">{% trans "Channel" %}</label>
+                <select name="channel" class="select">
+                <option value="email">{% trans "Email" %}</option>
+                <option value="whatsapp">{% trans "WhatsApp" %}</option>
+                <option value="sms">{% trans "SMS" %}</option>
+                </select>
+                </div>
+
+                <div class="form-group">
+                <label class="form-group-label">{% trans "Template" %}</label>
+                <select name="template" class="select">
+                <option value="">{% trans "None" %}</option>
+                {% for template in templates %}
+                <option value="{{ template.id }}">{{ template.name }}</option>
+                {% endfor %}
+                </select>
+                </div>
+
+                <div class="form-group">
+                <label class="form-group-label">{% trans "Delay (hours)" %}</label>
+                <input type="number" name="delay_hours" class="input" value="0" min="0">
+                <p class="text-xs text-base-content/40 mt-1">{% trans "Hours to wait after trigger before sending" %}</p>
+                </div>
+
+                <div class="form-group">
+                <label class="form-group-label">{% trans "Active" %}</label>
+                <input type="checkbox" name="is_active" class="toggle" checked>
+                </div>
+                </div>
+
+                <div class="side-sheet-footer">
+                <button type="button" class="btn btn-ghost btn-sm">{% trans "Cancel" %}</button>
+                <button type="submit" class="btn btn-sm color-primary">
+                {% icon "save-outline" %}
+                {% trans "Create Automation" %}
+                </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

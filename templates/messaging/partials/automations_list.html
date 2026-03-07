@@ -36,7 +36,7 @@
                         {% endif %}
                     </button>
                     <button class="datatable-action-btn"
-                            @click="openPanel('{% url 'messaging:automation_edit' automation.pk %}')"
+                            hx-get="{% url 'messaging:automation_edit' automation.pk %}" hx-target="#main-content-area" hx-push-url="true"
                             title="{% trans 'Edit' %}">
                         {% icon "create-outline" %}
                     </button>
