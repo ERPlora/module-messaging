@@ -20,7 +20,7 @@
     </div>
 
     <!-- Form -->
-    <form hx-post="{% url 'messaging:automation_add' %}" class="max-w-2xl">
+    <form hx-post="{% url 'messaging:automation_add' %}">
         {% csrf_token %}
         <div class="card mb-4">
             <div class="card-body flex flex-col gap-4">
