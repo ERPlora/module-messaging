@@ -1,91 +1,362 @@
-# Messaging Module
+# Messaging
 
-Customer communication via WhatsApp, SMS, and email with CRM automations.
+## Overview
 
-## Features
+| Property | Value |
+|----------|-------|
+| **Module ID** | `messaging` |
+| **Version** | `2.0.0` |
+| **Icon** | `chatbubbles-outline` |
+| **Dependencies** | `customers` |
 
-- Multi-channel messaging: WhatsApp, SMS, and email from a single interface
-- Reusable message templates with variable placeholders ({{variables}}) and categories
-- Template categories: appointment reminder, booking confirmation, receipt, marketing, custom
-- Bulk messaging campaigns with scheduling, progress tracking, and delivery analytics
-- CRM-driven automations triggered by events: new customer welcome, birthday, anniversary, post-sale, post-appointment, inactivity, loyalty tier change, lead stage change, ticket resolved, booking confirmed/reminder
-- Configurable delay between trigger and message delivery
-- Automation execution logging with status tracking (pending, sent, failed, skipped)
-- Message delivery tracking: queued, sent, delivered, read, and failed statuses
-- WhatsApp Business API integration (API token, phone ID, business ID)
-- SMS provider support: Twilio and MessageBird
-- SMTP email configuration with TLS support
-- Customer-linked messages for communication history
-- Campaign delivery rate and progress percentage metrics
+## Dependencies
 
-## Installation
+This module requires the following modules to be installed:
 
-This module is installed automatically via the ERPlora Marketplace.
-
-**Dependencies**: Requires `customers` module.
-
-## Configuration
-
-Access settings via: **Menu > Messaging > Settings**
-
-Settings include:
-- WhatsApp: enable/disable, API token, phone ID, business ID
-- SMS: enable/disable, provider (Twilio/MessageBird), API key, sender name
-- Email: enable/disable, from name/address, SMTP host/port/credentials, TLS toggle
-- Automations: appointment reminder toggle and hours before, booking confirmation toggle
-
-## Usage
-
-Access via: **Menu > Messaging**
-
-### Views
-
-| View | URL | Description |
-|------|-----|-------------|
-| Dashboard | `/m/messaging/dashboard/` | Messaging overview and channel statistics |
-| Messages | `/m/messaging/messages/` | View sent messages and delivery statuses |
-| Templates | `/m/messaging/templates/` | Create and manage reusable message templates |
-| Campaigns | `/m/messaging/campaigns/` | Create and manage bulk messaging campaigns |
-| Automations | `/m/messaging/automations/` | Configure CRM-triggered automated messages |
-| Settings | `/m/messaging/settings/` | Channel configuration and provider setup |
+- `customers`
 
 ## Models
 
-| Model | Description |
-|-------|-------------|
-| `MessagingSettings` | Singleton per-hub settings for WhatsApp, SMS, and email channel configuration |
-| `MessageTemplate` | Reusable message template with name, channel, category, subject, body with variable placeholders, and active/system flags |
-| `Message` | Sent message log with channel, recipient, subject, body, delivery status, timestamps (sent/delivered/read), customer link, and external provider ID |
-| `Campaign` | Bulk messaging campaign with name, channel, template, status (draft/scheduled/sending/completed/cancelled), scheduling, recipient count, and delivery metrics |
-| `MessageAutomation` | Automated messaging rule with trigger event, channel, template, delay, conditions, and execution counter |
-| `AutomationExecution` | Automation execution log with customer, message, status, trigger data, and scheduled/executed timestamps |
+### `MessagingSettings`
+
+Per-hub messaging configuration.
+
+| Field | Type | Details |
+|-------|------|---------|
+| `whatsapp_enabled` | BooleanField |  |
+| `whatsapp_api_token` | CharField | max_length=500, optional |
+| `whatsapp_phone_id` | CharField | max_length=50, optional |
+| `whatsapp_business_id` | CharField | max_length=50, optional |
+| `sms_enabled` | BooleanField |  |
+| `sms_provider` | CharField | max_length=20, choices: none, twilio, messagebird |
+| `sms_api_key` | CharField | max_length=255, optional |
+| `sms_sender_name` | CharField | max_length=11, optional |
+| `email_enabled` | BooleanField |  |
+| `email_from_name` | CharField | max_length=255, optional |
+| `email_from_address` | EmailField | max_length=254, optional |
+| `email_smtp_host` | CharField | max_length=255, optional |
+| `email_smtp_port` | IntegerField |  |
+| `email_smtp_username` | CharField | max_length=255, optional |
+| `email_smtp_password` | CharField | max_length=255, optional |
+| `email_smtp_use_tls` | BooleanField |  |
+| `appointment_reminder_enabled` | BooleanField |  |
+| `appointment_reminder_hours` | IntegerField |  |
+| `booking_confirmation_enabled` | BooleanField |  |
+
+**Methods:**
+
+- `get_settings()` — Get or create settings for a hub.
+
+### `MessageTemplate`
+
+Reusable message templates with variable placeholders.
+
+| Field | Type | Details |
+|-------|------|---------|
+| `name` | CharField | max_length=200 |
+| `channel` | CharField | max_length=20, choices: whatsapp, sms, email, all |
+| `category` | CharField | max_length=30, choices: appointment_reminder, booking_confirmation, receipt, marketing, custom |
+| `subject` | CharField | max_length=255, optional |
+| `body` | TextField |  |
+| `is_active` | BooleanField |  |
+| `is_system` | BooleanField |  |
+
+**Methods:**
+
+- `render_body()` — Render template body with context variables.
+- `render_subject()` — Render template subject with context variables.
+
+### `Message`
+
+Sent message log.
+
+| Field | Type | Details |
+|-------|------|---------|
+| `channel` | CharField | max_length=20, choices: whatsapp, sms, email |
+| `recipient_name` | CharField | max_length=255, optional |
+| `recipient_contact` | CharField | max_length=255 |
+| `subject` | CharField | max_length=255, optional |
+| `body` | TextField |  |
+| `status` | CharField | max_length=20, choices: queued, sent, delivered, failed, read |
+| `template` | ForeignKey | → `messaging.MessageTemplate`, on_delete=SET_NULL, optional |
+| `customer` | ForeignKey | → `customers.Customer`, on_delete=SET_NULL, optional |
+| `sent_at` | DateTimeField | optional |
+| `delivered_at` | DateTimeField | optional |
+| `read_at` | DateTimeField | optional |
+| `error_message` | TextField | optional |
+| `external_id` | CharField | max_length=255, optional |
+| `metadata` | JSONField | optional |
+
+**Methods:**
+
+- `mark_sent()` — Mark message as sent.
+- `mark_delivered()` — Mark message as delivered.
+- `mark_read()` — Mark message as read.
+- `mark_failed()` — Mark message as failed.
+
+**Properties:**
+
+- `channel_icon` — Return icon name for this channel.
+- `status_color` — Return ux color class for this status.
+
+### `Campaign`
+
+Bulk messaging campaigns.
+
+| Field | Type | Details |
+|-------|------|---------|
+| `name` | CharField | max_length=200 |
+| `description` | TextField | optional |
+| `channel` | CharField | max_length=20, choices: whatsapp, sms, email, all |
+| `template` | ForeignKey | → `messaging.MessageTemplate`, on_delete=SET_NULL, optional |
+| `status` | CharField | max_length=20, choices: draft, scheduled, sending, completed, cancelled |
+| `scheduled_at` | DateTimeField | optional |
+| `started_at` | DateTimeField | optional |
+| `completed_at` | DateTimeField | optional |
+| `total_recipients` | PositiveIntegerField |  |
+| `sent_count` | PositiveIntegerField |  |
+| `delivered_count` | PositiveIntegerField |  |
+| `failed_count` | PositiveIntegerField |  |
+| `target_filter` | JSONField | optional |
+
+**Methods:**
+
+- `start()` — Mark campaign as sending.
+- `complete()` — Mark campaign as completed.
+- `cancel()` — Cancel the campaign.
+
+**Properties:**
+
+- `delivery_rate` — Calculate delivery rate as a percentage.
+- `progress_percent` — Calculate send progress as a percentage.
+- `status_color` — Return ux color class for this status.
+
+### `MessageAutomation`
+
+Automated messaging rules that fire on CRM events.
+
+| Field | Type | Details |
+|-------|------|---------|
+| `name` | CharField | max_length=200 |
+| `description` | TextField | optional |
+| `trigger` | CharField | max_length=30, choices: welcome, birthday, anniversary, post_sale, post_appointment, inactivity, ... |
+| `channel` | CharField | max_length=20, choices: whatsapp, sms, email, all |
+| `template` | ForeignKey | → `messaging.MessageTemplate`, on_delete=SET_NULL, optional |
+| `delay_hours` | IntegerField |  |
+| `is_active` | BooleanField |  |
+| `conditions` | JSONField | optional |
+| `total_sent` | PositiveIntegerField |  |
+| `last_triggered_at` | DateTimeField | optional |
+
+**Properties:**
+
+- `trigger_icon`
+
+### `AutomationExecution`
+
+Log of automation executions.
+
+| Field | Type | Details |
+|-------|------|---------|
+| `automation` | ForeignKey | → `messaging.MessageAutomation`, on_delete=CASCADE |
+| `customer` | ForeignKey | → `customers.Customer`, on_delete=SET_NULL, optional |
+| `message` | ForeignKey | → `messaging.Message`, on_delete=SET_NULL, optional |
+| `status` | CharField | max_length=20, choices: pending, sent, failed, skipped |
+| `trigger_data` | JSONField | optional |
+| `error_message` | TextField | optional |
+| `scheduled_for` | DateTimeField | optional |
+| `executed_at` | DateTimeField | optional |
+
+## Cross-Module Relationships
+
+| From | Field | To | on_delete | Nullable |
+|------|-------|----|-----------|----------|
+| `Message` | `template` | `messaging.MessageTemplate` | SET_NULL | Yes |
+| `Message` | `customer` | `customers.Customer` | SET_NULL | Yes |
+| `Campaign` | `template` | `messaging.MessageTemplate` | SET_NULL | Yes |
+| `MessageAutomation` | `template` | `messaging.MessageTemplate` | SET_NULL | Yes |
+| `AutomationExecution` | `automation` | `messaging.MessageAutomation` | CASCADE | No |
+| `AutomationExecution` | `customer` | `customers.Customer` | SET_NULL | Yes |
+| `AutomationExecution` | `message` | `messaging.Message` | SET_NULL | Yes |
+
+## URL Endpoints
+
+Base path: `/m/messaging/`
+
+| Path | Name | Method |
+|------|------|--------|
+| `(root)` | `dashboard` | GET |
+| `messages/` | `messages` | GET |
+| `messages/<uuid:pk>/` | `message_detail` | GET |
+| `messages/compose/` | `send_message` | GET |
+| `templates/` | `templates` | GET |
+| `templates/create/` | `template_create` | GET/POST |
+| `templates/<uuid:pk>/edit/` | `template_edit` | GET |
+| `templates/<uuid:pk>/delete/` | `template_delete` | GET/POST |
+| `campaigns/` | `campaigns` | GET |
+| `campaigns/create/` | `campaign_create` | GET/POST |
+| `campaigns/<uuid:pk>/` | `campaign_detail` | GET |
+| `campaigns/<uuid:pk>/start/` | `campaign_start` | GET |
+| `campaigns/<uuid:pk>/cancel/` | `campaign_cancel` | GET |
+| `automations/` | `automations` | GET |
+| `automations/add/` | `automation_add` | GET/POST |
+| `automations/<uuid:pk>/edit/` | `automation_edit` | GET |
+| `automations/<uuid:pk>/delete/` | `automation_delete` | GET/POST |
+| `automations/<uuid:pk>/toggle/` | `automation_toggle` | GET |
+| `api/send/` | `api_send` | GET |
+| `api/webhook/` | `api_webhook` | GET |
+| `settings/` | `settings` | GET |
+| `settings/save/` | `settings_save` | GET/POST |
 
 ## Permissions
 
 | Permission | Description |
 |------------|-------------|
-| `messaging.view_message` | View sent messages |
-| `messaging.send_message` | Send messages |
-| `messaging.view_template` | View message templates |
-| `messaging.add_template` | Create new templates |
-| `messaging.change_template` | Edit existing templates |
-| `messaging.delete_template` | Delete templates |
-| `messaging.view_campaign` | View campaigns |
-| `messaging.add_campaign` | Create new campaigns |
-| `messaging.view_automation` | View automations |
-| `messaging.add_automation` | Create new automations |
-| `messaging.change_automation` | Edit existing automations |
-| `messaging.delete_automation` | Delete automations |
-| `messaging.manage_settings` | Manage module settings |
+| `messaging.view_message` | View Message |
+| `messaging.send_message` | Send Message |
+| `messaging.view_template` | View Template |
+| `messaging.add_template` | Add Template |
+| `messaging.change_template` | Change Template |
+| `messaging.delete_template` | Delete Template |
+| `messaging.view_campaign` | View Campaign |
+| `messaging.add_campaign` | Add Campaign |
+| `messaging.view_automation` | View Automation |
+| `messaging.add_automation` | Add Automation |
+| `messaging.change_automation` | Change Automation |
+| `messaging.delete_automation` | Delete Automation |
+| `messaging.manage_settings` | Manage Settings |
 
-## Integration with Other Modules
+**Role assignments:**
 
-- **customers**: Messages and campaigns are linked to customer records. Automations can trigger based on customer events (welcome, birthday, anniversary, inactivity). Campaign targeting uses customer filters.
+- **admin**: All permissions
+- **manager**: `add_automation`, `add_campaign`, `add_template`, `change_automation`, `change_template`, `send_message`, `view_automation`, `view_campaign` (+2 more)
+- **employee**: `send_message`, `view_automation`, `view_campaign`, `view_message`, `view_template`
 
-## License
+## Navigation
 
-MIT
+| View | Icon | ID | Fullpage |
+|------|------|----|----------|
+| Dashboard | `speedometer-outline` | `dashboard` | No |
+| Messages | `chatbubble-outline` | `messages` | No |
+| Templates | `document-text-outline` | `templates` | No |
+| Campaigns | `megaphone-outline` | `campaigns` | No |
+| Automations | `flash-outline` | `automations` | No |
+| Settings | `settings-outline` | `settings` | No |
 
-## Author
+## AI Tools
 
-ERPlora Team - support@erplora.com
+Tools available for the AI assistant:
+
+### `list_message_templates`
+
+List message templates (WhatsApp, SMS, email).
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `channel` | string | No | whatsapp, sms, email, all |
+| `is_active` | boolean | No |  |
+
+### `create_message_template`
+
+Create a message template for WhatsApp/SMS/email.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `name` | string | Yes |  |
+| `channel` | string | Yes | whatsapp, sms, email, all |
+| `category` | string | No |  |
+| `subject` | string | No |  |
+| `body` | string | Yes | Template body (supports {{variables}}) |
+
+### `list_messages`
+
+List sent messages.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `channel` | string | No |  |
+| `status` | string | No | queued, sent, delivered, failed, read |
+| `limit` | integer | No |  |
+
+### `list_message_automations`
+
+List message automations (triggers like welcome, birthday, post_sale).
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `is_active` | boolean | No |  |
+
+### `create_message_automation`
+
+Create a message automation (e.g., welcome SMS, birthday email, post-sale thank you).
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `name` | string | Yes |  |
+| `trigger` | string | Yes | welcome, birthday, post_sale, inactivity, etc. |
+| `channel` | string | Yes |  |
+| `template_id` | string | Yes |  |
+| `delay_hours` | integer | No | Hours to wait before sending |
+
+## File Structure
+
+```
+README.md
+__init__.py
+ai_tools.py
+forms.py
+locale/
+  es/
+    LC_MESSAGES/
+      django.po
+migrations/
+  0001_initial.py
+  __init__.py
+models.py
+module.py
+static/
+  messaging/
+    css/
+    js/
+templates/
+  messaging/
+    pages/
+      automation_add.html
+      automation_edit.html
+      automations.html
+      campaign_detail.html
+      campaign_form.html
+      campaigns.html
+      compose.html
+      dashboard.html
+      message_detail.html
+      messages.html
+      settings.html
+      template_form.html
+      templates.html
+    partials/
+      automation_add_content.html
+      automation_edit_content.html
+      automations_content.html
+      automations_list.html
+      campaign_detail_content.html
+      campaign_form_content.html
+      campaigns_content.html
+      compose_content.html
+      dashboard_content.html
+      message_detail_content.html
+      messages_content.html
+      messages_list_rows.html
+      panel_automation_add.html
+      panel_automation_edit.html
+      settings_content.html
+      template_form_content.html
+      templates_content.html
+tests/
+  __init__.py
+  conftest.py
+  test_models.py
+  test_views.py
+urls.py
+views.py
+```
