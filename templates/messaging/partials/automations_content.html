@@ -2,8 +2,8 @@
 
 <div x-data="{
     deleteConfirm: false,
-    deleteTarget: null);
-    }}">
+    deleteTarget: null
+}">
     <div class="flex items-center justify-between mb-4 mt-5">
         <h2 class="text-lg font-semibold">{% trans "Automations" %}</h2>
         <button class="btn btn-sm color-primary"
@@ -15,7 +15,6 @@
 
     <div id="automations-list">
         {% include "messaging/partials/automations_list.html" %}
-    </div>
     </div>
 
     <!-- Delete Confirmation -->
@@ -30,7 +29,7 @@
             <div class="modal-footer">
                 <button class="btn btn-ghost btn-sm" @click="deleteConfirm = false">{% trans "Cancel" %}</button>
                 <button class="btn btn-sm color-error"
-                        @click="if(deleteTarget) { htmx.ajax('POST', deleteTarget, { target: '#automations-list', values: { csrfmiddlewaretoken: '{{ csrf_token }}' } }, deleteConfirm = false; }">
+                        @click="if(deleteTarget) { htmx.ajax('POST', deleteTarget, { target: '#automations-list', values: { csrfmiddlewaretoken: '{{ csrf_token }}' } }); deleteConfirm = false; }">
                     {% trans "Delete" %}
                 </button>
             </div>
