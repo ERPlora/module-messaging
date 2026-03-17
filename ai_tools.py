@@ -134,3 +134,27 @@ class CreateMessageAutomation(AssistantTool):
             template_id=args['template_id'], delay_hours=args.get('delay_hours', 0),
         )
         return {"id": str(a.id), "name": a.name, "created": True}
+
+
+@register_tool
+class DeleteMessage(AssistantTool):
+    name = "delete_message"
+    description = "Delete a sent message record."
+    module_id = "messaging"
+    required_permission = "messaging.delete_message"
+    requires_confirmation = True
+    parameters = {
+        "type": "object",
+        "properties": {"message_id": {"type": "string"}},
+        "required": ["message_id"],
+        "additionalProperties": False,
+    }
+
+    def execute(self, args, request):
+        from messaging.models import Message
+        try:
+            m = Message.objects.get(id=args['message_id'])
+            m.delete()
+            return {"deleted": True}
+        except Message.DoesNotExist:
+            return {"error": "Message not found"}
