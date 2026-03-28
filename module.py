@@ -7,6 +7,7 @@ MODULE_ICON = 'chatbubbles-outline'
 MODULE_DESCRIPTION = _('Customer communication via WhatsApp, SMS, and email with CRM automations')
 MODULE_AUTHOR = 'ERPlora'
 MODULE_CATEGORY = 'marketing'
+HAS_MODELS = True
 
 MENU = {
     'label': _('Messaging'),
